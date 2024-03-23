@@ -1,0 +1,51 @@
+1
+
+with ll as(
+  SELECT loser_name as lname, count(loser_name) as count_lose, avg(minutes) as avg_min_loss
+  FROM `my-project-de-411620.tennise_matches_example.atp_2022`  
+  WHERE tourney_level = 'G'
+  GROUP BY(loser_name)
+),
+ww as(
+  SELECT winner_name as wname, count(winner_name) as count_win, max(winner_age) as age, 
+  min(winner_rank) as best_rank, max(winner_ioc) as country,  avg(minutes) as avg_min_win
+  FROM `my-project-de-411620.tennise_matches_example.atp_2022` as ww
+  WHERE tourney_level = 'G'
+  GROUP BY(winner_name)
+)
+SELECT 
+ww.wname as winner_name, ww.count_win, ll.count_lose, ww.age as age, ww.best_rank as rank, 
+ww.country as country, ww.avg_min_win as avg_min_win, ll.avg_min_loss as avg_min_loss
+FROM ll, ww
+WHERE ww.wname = ll.lname
+ORDER BY ww.best_rank
+LIMIT 20 
+
+
+
+
+
+
+2
+
+SELECT tourney_name , count(tourney_name) as count
+FROM `my-project-de-411620.tennise_matches_example.atp_2022`
+WHERE tourney_level = 'G'
+GROUP BY(tourney_name)
+
+
+3
+
+SELECT tourney_level , count(tourney_level) as count
+FROM `my-project-de-411620.tennise_matches_example.atp_2022`
+GROUP BY(tourney_level)
+
+
+
+
+4
+
+SELECT surface , count(surface) as count, 'Grand Slam' as game_level
+FROM `my-project-de-411620.tennise_matches_example.atp_2022`
+WHERE tourney_level = 'G'
+GROUP BY(surface)
